@@ -1,0 +1,13 @@
+version: '3.9'
+
+x-environment: &environment
+  TEST: test_value
+
+services:
+  core:
+    image: something
+    environment:
+        <<: *environment
+    restart: unless-stopped
+    ports:
+      - 8000:8000
