@@ -2,8 +2,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from rest_framework.pagination import PageNumberPagination
 from posts.models import Category, Comment, Post
+from posts.permissions import IsAuthorOrReadOnly
 from posts.serializers import (
     CategoryReadSerializer,
     CommentReadSerializer,
@@ -12,17 +13,23 @@ from posts.serializers import (
     PostWriteSerializer,
 )
 
-from .permissions import IsAuthorOrReadOnly
+
+class BaseAPIListPagination(PageNumberPagination):
+    page_size = 2
+    page_size_query_param = 'size'
+    max_page_size = 1000
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategoryReadSerializer
     permission_classes = (permissions.AllowAny,)
+    pagination_class = BaseAPIListPagination
 
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
+    pagination_class = BaseAPIListPagination
 
     def get_serializer_class(self):
         if self.action in ("create", "update", "partial_update", "destroy"):
@@ -43,6 +50,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
+    pagination_class = BaseAPIListPagination
 
     def get_queryset(self):
         res = super().get_queryset()
@@ -68,8 +76,9 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 class LikePostAPIView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
+    pagination_class = BaseAPIListPagination
 
-    def get(self, request, pk):
+    def post(self, request, pk):
         user = request.user
         post = get_object_or_404(Post, pk=pk)
 

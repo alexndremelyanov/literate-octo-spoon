@@ -15,15 +15,16 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(_("Post title"), max_length=250)
+    title = models.CharField(_("Title"), max_length=250)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name="posts",
         null=True,
         on_delete=models.SET_NULL,
     )
-    categories = models.ManyToManyField(Category, related_name="posts_list", blank=True)
-    body = models.TextField(_("Post body"))
+    categories = models.ManyToManyField(
+        Category, related_name="posts_list", blank=True)
+    body = models.TextField(_("Body"))
     likes = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="post_likes", blank=True
     )
@@ -38,14 +39,15 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)
+    post = models.ForeignKey(
+        Post, related_name="comments", on_delete=models.CASCADE)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name="post_comments",
         null=True,
         on_delete=models.SET_NULL,
     )
-    body = models.TextField(_("Comment body"))
+    body = models.TextField(_("Body"))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
