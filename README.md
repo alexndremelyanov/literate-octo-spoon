@@ -2,7 +2,7 @@
 
 
 ```sh
-$ docker build . -t literate-octo-spoon'
+$ docker build . -t literate-octo-spoon
 ```
 
 # Running
