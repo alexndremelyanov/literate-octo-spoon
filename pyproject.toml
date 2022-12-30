@@ -1,10 +1,9 @@
 [tool.poetry]
-name = "drf-blog-api"
+name = "literate-octo-spoon"
 version = "0.1.0"
 description = ""
 authors = ["a.emelyanov <alexndr.emelyanov@gmail.com>"]
 readme = "README.md"
-packages = [{include = "drf_blog_api"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"

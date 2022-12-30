@@ -5,7 +5,7 @@ x-environment: &environment
 
 services:
   core:
-    image: something
+    image: literate-octo-spoon
     environment:
         <<: *environment
     restart: unless-stopped
